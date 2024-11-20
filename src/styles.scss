@@ -4,6 +4,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
 
 $typography-map: (
+    "display-large": ("line-height": 64px,
+        "size": 57px,
+        "tracking": -0.25px,
+        "weight": 400),
+    "display-medium": ("line-height": 52px,
+        "size": 45px,
+        "tracking": 0,
+        "weight": 400),
+    "headline-large": ("line-height": 40px,
+        "size": 32px,
+        "tracking": 0,
+        "weight": 400),
+    "headline-medium": ("line-height": 36px,
+        "size": 28px,
+        "tracking": 0,
+        "weight": 400),
     "title-medium": ("line-height": 24px,
         "size": 16px,
         "tracking": 0.15px,
@@ -25,6 +41,22 @@ $typography-map: (
     font-weight: map.get($font-map, "weight");
     letter-spacing: map.get($font-map, "tracking");
     line-height: map.get($font-map, "line-height");
+}
+
+@mixin typography-display-large {
+    @include _private-apply-font("display-large");
+}
+
+@mixin typography-display-medium {
+    @include _private-apply-font("display-medium");
+}
+
+@mixin typography-headline-large {
+    @include _private-apply-font("headline-large");
+}
+
+@mixin typography-headline-medium {
+    @include _private-apply-font("headline-medium");
 }
 
 @mixin typography-title-medium {
@@ -70,20 +102,126 @@ $typography-map: (
     color-scheme: light dark;
 }
 
+$breakpoint-phone: 600px;
+$breakpoint-tablet: 840px;
+
 html,
 body {
     margin: 0;
     height: 100%;
 }
 
+h1, h2, h3, p {
+    margin: 0;
+}
+
 body {
+    @include typography-body-large;
+
     display: grid;
-    place-items: center;
+    grid-auto-rows: min-content;
+    grid-template-columns: repeat(4, 1fr);
+    column-gap: 16px;
+    padding-inline: 16px;
+
     font-family: "Roboto", sans-serif;
 
     background-color: var(--md-sys-color-background);
     color: var(--md-sys-color-on-background);
+
+    position: relative;
+
+    @media(width >=#{$breakpoint-phone}) {
+        grid-template-columns: repeat(8, 1fr);
+        column-gap: 24px;
+        padding-inline: 32px;
+    }
+
+    @media(width >=#{$breakpoint-tablet}) {
+        grid-template-columns: repeat(12, 1fr);
+        padding-inline: 64px;
+    }
 }
+
+section {
+    grid-column: 1/-1;
+    display: grid;
+    grid-template-columns: subgrid;
+    isolation: isolate;
+}
+
+.hero-section {
+    height: 100dvh;
+
+    &__content {
+        grid-column: span 6;
+        display: grid;
+        align-items: center;
+        padding-block: 100px;
+
+        &__heading {
+            h1 {
+                @include typography-display-large;
+            }
+
+            h2 {
+                @include typography-headline-large;
+            }
+        }
+    }
+
+    &__cta {
+        @include typography-display-medium;
+        padding: 24px;
+        border-radius: 16px;
+        background: #006399;
+        display: grid;
+        place-items: center;
+    }
+
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: url('https://s3-alpha-sig.figma.com/img/3989/7224/4c6070a2ebc9aad8326664f7dcfe1798?Expires=1733097600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=QSx9sYpdV57cPDY3jcXD4MVssI2Ud7XyxgIj1cyMtnKNKQpyFdCTfTsL6ORf7wK475FV90MxX9TPHUYLVH030pQtRWsZRhiGXx3ED3KE9n4ldMAXcWHH05qgwD-i3rXTRwmtNYQfbxWRr9vh3w5OKsbkZp7H4Try2z3OGpwwGyFLGg4jMarpuWdyfIwKjVpOwwPohU9SWdf1m0TNYKKlUFKFgMb1Rq~vbg6WqVQPpmlaAl7ySD4U-B0FBT2n6TqvhiVqBu9H1LAk0t1ZRaTe2kHN~2VG2RTmrKSdbgBMBFfOlmnA7kZJzR8sSNWShuV9JRo4bDya~4-IOjR4bKOWhA__');
+        background-size: cover;
+        background-position: right;
+        z-index: -1;
+    }
+}
+
+.section-desc {
+    padding-block: 100px;
+
+    &__image {
+        height: 256px;
+        background-color: lightblue;
+        grid-column: span 5;
+        border-radius: 16px;
+    }
+
+    &__content {
+        grid-column: 7 / span 6;
+        display: grid;
+        grid-auto-rows: min-content;
+        gap: 16px;
+
+        h3 {
+            @include typography-headline-medium;
+        }
+    }
+
+    @media(width < #{$breakpoint-tablet}) {
+        &__image, &__content {
+            grid-column: span 4;
+        }
+    }
+}
+
+
+
+
+
 
 .list-container {
     padding-block: 8px;
